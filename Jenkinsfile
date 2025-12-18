@@ -26,7 +26,7 @@ pipeline {
             steps {
                 bat '''
                 echo Stopping old Spring Boot application if running...
-                taskkill /F /IM java.exe >nul 2>&1 || exit 0
+                for /f "tokens=5" %%a in ('netstat -ano ^| findstr :9090') do taskkill /PID %%a /F
                 '''
             }
         }
