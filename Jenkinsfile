@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = "demo_jekins-0.0.1-SNAPSHOT.jar"
+        APP_PORT = "9090"
+    }
+
+    stages {
+        stage('Checkout Source') {
+            steps {
+                git branch: 'main', url: 'https://github.com/chanhtran235/demo-jenkin.git'
+            }
+        }
+
+        stage('Build with Gradle') {
+            steps {
+                bat '''
+                cd %WORKSPACE%
+                .\gradlew.bat clean bootJar
+                '''
+            }
+        }
+
+        stage('Stop Old Application') {
+            steps {
+                bat '''
+                echo Stopping old Spring Boot application if running...
+                taskkill /F /IM java.exe >nul 2>&1 || exit 0
+                '''
+            }
+        }
+
+        stage('Run Application') {
+            steps {
+                bat '''
+                echo Starting Spring Boot application on port 9090...
+                start "spring-boot-app" java -jar build\libs\%APP_NAME%
+                '''
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build & Deploy SUCCESSFUL 🎉'
+        }
+        failure {
+            echo 'Build or Deploy FAILED ❌'
+        }
+    }
+}
