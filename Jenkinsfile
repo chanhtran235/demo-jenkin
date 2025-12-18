@@ -35,7 +35,7 @@ pipeline {
             steps {
                 bat '''
                 echo Starting Spring Boot application on port 9090...
-                start "spring-boot-app" java -jar build\libs\%APP_NAME%
+                start "spring-boot-app" java -jar build\\libs\\%APP_NAME%
                 '''
             }
         }
