@@ -17,7 +17,7 @@ pipeline {
             steps {
                 bat '''
                 cd %WORKSPACE%
-                .\gradlew.bat clean bootJar
+                radlew.bat clean bootJar
                 '''
             }
         }
